@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="sk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kronika družiny – DnD 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg"><meta name="theme-color" content="#120c26">
+</head><body>
+<header class="top"><a class="brand" href="#/">⚔ Kronika družiny</a><nav id="crumbs"></nav><input id="gs" type="search" placeholder="Hľadať…" aria-label="Hľadať"><nav class="tl"><a href="#/bestiar">Bestiár</a> · <a href="#/generator">Generátory</a></nav></header>
+<div id="toast" aria-live="polite"></div>
+<div class="bgart" aria-hidden="true"></div>
+<div id="banner" style="display:none"></div>
+<div id="app"></div>
+<footer class="wrap"><button data-a="dl">Stiahnuť data.js (verejný)</button> <button data-a="dlf">Stiahnuť plnú zálohu</button> <button data-a="ex">Zobraziť export</button> <button data-a="imp">Načítať zo súboru</button><input type="file" id="pic" accept="image/*" hidden><input type="file" id="imp" accept=".js,.json" hidden> <button data-a="gh">Ukladanie na GitHub</button> <button class="pri" data-a="ghsave">Uložiť na GitHub</button> <button data-a="bk">Zálohy</button> <button data-a="rs">Zahodiť lokálne zmeny</button><div id="io"></div></footer>
+<script src="data.js"></script>
+<script src="art.js"></script>
+<script src="rules.js"></script>
+<script src="spells.js"></script>
+<script src="dm.js"></script>
+<script src="app.js"></script>
+<script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js")</script>
+</body></html>
