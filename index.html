@@ -1,22 +1,68 @@
 <!DOCTYPE html>
-<html lang="sk"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kronika družiny – DnD 5e</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg"><meta name="theme-color" content="#120c26">
-</head><body>
-<header class="top"><a class="brand" href="#/">⚔ Kronika družiny</a><nav id="crumbs"></nav><input id="gs" type="search" placeholder="Hľadať…" aria-label="Hľadať"><nav class="tl"><a href="#/bestiar">Bestiár</a> · <a href="#/generator">Generátory</a></nav></header>
-<div id="toast" aria-live="polite"></div>
-<div class="bgart" aria-hidden="true"></div>
-<div id="banner" style="display:none"></div>
-<div id="app"></div>
-<footer class="wrap"><button data-a="dl">Stiahnuť data.js (verejný)</button> <button data-a="dlf">Stiahnuť plnú zálohu</button> <button data-a="ex">Zobraziť export</button> <button data-a="imp">Načítať zo súboru</button><input type="file" id="pic" accept="image/*" hidden><input type="file" id="imp" accept=".js,.json" hidden> <button data-a="gh">Ukladanie na GitHub</button> <button class="pri" data-a="ghsave">Uložiť na GitHub</button> <button data-a="bk">Zálohy</button> <button data-a="rs">Zahodiť lokálne zmeny</button><div id="io"></div></footer>
-<script src="data.js"></script>
-<script src="art.js"></script>
-<script src="rules.js"></script>
-<script src="spells.js"></script>
-<script src="dm.js"></script>
-<script src="app.js"></script>
-<script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js")</script>
+<html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Osada na hranici</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#140f26">
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css"></head><body><canvas id="bg" aria-hidden="true"></canvas>
+<header>
+ <div class="top"><h1><img src="favicon.svg" alt="" width="36" height="36">Osada na hranici</h1><span id="dirty">Máš neodoslané zmeny</span></div>
+ <nav id="nav"></nav>
+</header>
+<main>
+<section id="s-home">
+ <div class="card"><h2 id="hN">Najbližšia výprava</h2>
+  <div id="clock"></div>
+  <p id="hInfo"></p>
+ </div>
+ <div class="card"><h3>Stav osady</h3><div class="row" id="stock"></div></div>
+ <div class="card" id="hWorkCard"><h3>Prebiehajúce práce</h3><div id="hWork"></div></div>
+ <div class="card"><h3>Čas v hre</h3><p id="hTime"></p></div>
+ <div class="card" id="hEvCard"><h3>Udalosti osady</h3><div id="hEv"></div></div>
+ <div class="card"><h3>Previously on…</h3><div id="hPrev"></div></div>
+ <div class="card"><h3>Zvesti</h3><div id="rumors"></div></div>
+</section>
+<section id="s-exp"><h2>Výpravy</h2><div id="expList"></div>
+ <div class="card"><h3>Navrhnúť výpravu</h3>
+  <div class="row"><input id="nxDate" type="datetime-local" style="width:auto"><input id="nxTgt" placeholder="Cieľ (napr. D7 Zrúcaná veža)" style="flex:1"><button class="pri" id="nxAdd">Pridať</button></div></div>
+</section>
+<section id="s-world"><h2>Mapa sveta</h2>
+ <p class="mut">Tmavé polia sú neznáme. Polia o jedno ďalej od odhaleného územia ukazujú len terén a zvesti.</p><div id="m-world"></div></section>
+<section id="s-vil"><h2>Mapa osady</h2><div id="m-vil"></div></section>
+<section id="s-chars"><h2>Hráči a postavy</h2><div id="chars"></div><div class="card"><h3>Pridať hráča</h3><div class="row"><input id="pN" placeholder="Meno hráča" style="max-width:260px"><button class="pri" id="pAdd">Pridať hráča</button></div></div></section>
+<section id="s-npc"><h2>NPC</h2><div class="grid" id="npcs"></div>
+ <div class="card" style="margin-top:14px"><h3>Pridať NPC</h3>
+  <div class="row"><input id="nN" placeholder="Meno" style="flex:1"><input id="nI" placeholder="Cesta k obrázku, napr. img/npc/brom.webp" style="flex:2"></div>
+  <textarea id="nD" placeholder="Stručný popis"></textarea><button class="pri" id="nAdd" style="margin-top:8px">Pridať NPC</button></div>
+</section>
+<section id="s-rum"><h2>Zvesti</h2><p class="mut">Zvesť s poľom (napr. I5) sa ukáže ako ❓ na mape sveta, keď je pole na obzore.</p>
+ <div class="card"><h3>Pridať zvesť</h3><textarea id="rT" placeholder="Čo sa šušká?"></textarea>
+  <div class="row" style="margin-top:8px"><select id="rS" style="width:auto"><option>Cestovateľ</option><option>Stará mapa</option><option>Pozorovanie</option><option>Iné</option></select><input id="rH" placeholder="Pole, napr. I5" style="max-width:130px"><button class="pri" id="rAdd">Pridať zvesť</button></div></div>
+ <div id="rList"></div></section>
+<section id="s-set"><h2>Osada</h2>
+ <div class="card"><h3>Ukazovatele</h3><div class="row stats" id="ind"></div></div>
+ <div class="card"><h3>Sklad</h3><label>Tvoje meno (zapíše sa do záznamu zmien)</label><input id="me" style="max-width:240px"><div id="stockEd"></div>
+  <div class="row" style="margin-top:8px"><input id="sN" placeholder="Nová surovina" style="max-width:200px"><button id="sAdd">Pridať surovinu</button></div>
+  <h3 style="margin-top:14px">Predmety v sklade</h3><div id="stockItems" class="mut"></div><h3 style="margin-top:14px">Záznam zmien</h3><div id="stockLog" class="mut"></div></div>
+ <h3>Budovy a projekty</h3><div id="bld"></div><h3>Aktivity medzi výpravami</h3><div id="dt"></div><h3>Udalosti osady</h3><div id="ev"></div></section>
+<section id="s-chron"><h2>Kronika</h2><div class="card"><h3>Čas v hre</h3><div class="row" id="timeEd"></div></div><div id="chron"></div></section>
+<section id="s-fac"><h2>Frakcie</h2><div id="fac"></div></section>
+<section id="s-rules"><h2>Pravidlá</h2><div id="rules"></div></section>
+<section id="s-stat"><h2>Štatistiky</h2><div class="card" id="statBox"></div></section>
+<section id="s-dice"><h2>Kocky</h2>
+ <div class="card dice"><div class="row" id="dBtns"></div>
+  <div class="row" style="margin-top:10px"><input id="dF" value="1d20+3" style="max-width:200px"><button class="pri" id="dGo">Hodiť</button><button id="dAdv">Výhoda</button><button id="dDis">Nevýhoda</button></div>
+  <p class="mut">Vzorce: 2d6+3, 4d6kh3 (zober 3 najvyššie), 2d20kl1.</p></div>
+ <div class="card"><h3>Záznam hodov</h3><div id="log"></div></div>
+</section>
+<section id="s-send"><h2>Odoslať zmeny</h2>
+ <div class="card"><p>Zmeny sa ukladajú v tvojom prehliadači. Keď si hotový, stiahni súbor a pošli ho správcovi stránky.</p>
+  <div class="row"><button class="pri" id="bDl">Stiahnuť súbor</button><button id="bMail">Otvoriť e-mail</button><button id="bGm">Otvoriť Gmail</button><button id="bCp">Skopírovať názov</button></div>
+  <p class="mut">E-mail nevie priložiť súbor sám, pripoj ho ručne. Správca ho nahrá do priečinka data/ a prepíše pôvodný data.js. Ak upravuje viac ľudí, posielajte zmeny postupne, aby sa nič neprepísalo.</p>
+  <button id="bReset">Zahodiť lokálne zmeny</button></div>
+</section>
+</main>
+<div id="toast"></div>
+<script src="data/data.js"></script>
+<script src="js/bg.js"></script>
+<script src="js/app.js"></script>
 </body></html>
